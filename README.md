@@ -142,7 +142,7 @@ All functions return HTTP response maps with the following structure:
 ```clojure
 {:status 200
  :headers {...}
- :body {...}}  ; JSON response parsed as Clojure data
+ :body "..."}  ; body is a string containing JSON
 ```
 
 
