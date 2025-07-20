@@ -1,0 +1,2 @@
+{:paths ["src" "resources"]
+ :deps  {org.babashka/http-client {:mvn/version "0.4.22"}}}
