@@ -1,6 +1,7 @@
 (ns org.saberstack.hn.dl
   (:require [org.saberstack.hn.api-v0 :as api]
-            [taoensso.nippy :as nippy]))
+            [taoensso.nippy :as nippy]
+            [taoensso.timbre :as timbre]))
 
 (comment
 
@@ -18,29 +19,31 @@
 (defonce halt? (atom false))
 (defonce stopped-at (atom nil))
 (defonce sleep-ms (atom 500))
+(defonce last-dl (atom nil))
 
 (defn pmap-items! [item-ids]
   (let [resps (pmap api/item! item-ids)]
-    {:item-ids item-ids
-     :items    (into [] (map :body) resps)
+    {:item-ids    item-ids
+     :items       (into [] (map :body) resps)
      :status-200? (every? #(= 200 %) (map :status resps))
-     :resps resps}))
+     :resps       resps}))
 
 (defn items-to-disk! [items start-id end-id]
   (nippy/freeze-to-file
-    (str "items-" start-id "-" end-id)
+    (str "./hndl/" "items-" start-id "-" end-id)
     items))
 
 (defn download-items! [start-id]
   (reset! halt? false)
   (transduce
     (comp
-      (partition-all 250)
+      (partition-all 1000)
       (map pmap-items!)
       (map (fn [{:keys [items item-ids status-200? resps]}]
              (if status-200?
                (do
                  (items-to-disk! items (first item-ids) (peek item-ids))
+                 (reset! last-dl [(first item-ids) (peek item-ids)])
                  true)
                (do
                  (reset! stopped-at resps)
@@ -53,9 +56,13 @@
     conj
     (iterate inc start-id)))
 
+(defn thaw-items [file-name]
+  (nippy/thaw-from-file (str "./hndl/" file-name)))
+
 (comment
 
   (reset! halt? true)
-  (reset! sleep-ms 500)
-  (download-items! 1)
+  (reset! sleep-ms 20)
+  (future
+    (download-items! 11487001))
   )
