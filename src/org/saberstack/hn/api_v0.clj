@@ -4,11 +4,6 @@
 
 (def ^:private base-url "https://hacker-news.firebaseio.com/v0/")
 (def ^:private json-suffix ".json")
-(def ^:private endpoints
-  {:item    "item"
-   :user    "user"
-   :maxitem "maxitem"
-   :updates "updates"})
 
 (defn- uri
   ([suffix] (str base-url suffix json-suffix))
@@ -17,23 +12,47 @@
 (defn item!
   "Story, comment, etc"
   [id]
-  (http-client/get (uri (:item endpoints) id)))
+  (http-client/get (uri "item" id)))
 
 (defn user!
   "Retrieves user information by username.
    Note: username is case-sensitive."
   [username]
-  (http-client/get (uri (:user endpoints) username)))
+  (http-client/get (uri "user" username)))
 
 (defn max-item!
   "The current largest item id"
   []
-  (http-client/get (uri (:maxitem endpoints))))
+  (http-client/get (uri "max-item")))
 
 (defn updates!
   "Item and profile changes"
   []
-  (http-client/get (uri (:updates endpoints))))
+  (http-client/get (uri "updates")))
+
+(defn new-stories!
+  []
+  (http-client/get (uri "newstories")))
+
+(defn top-stories!
+  []
+  (http-client/get (uri "topstories")))
+
+(defn best-stories!
+  []
+  (http-client/get (uri "beststories")))
+
+(defn ask-stories!
+  []
+  (http-client/get (uri "askstories")))
+
+(defn show-stories!
+  []
+  (http-client/get (uri "showstories")))
+
+(defn job-stories!
+  []
+  (http-client/get (uri "jobstories")))
 
 (comment
 
