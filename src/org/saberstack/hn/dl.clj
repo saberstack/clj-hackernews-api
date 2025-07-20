@@ -17,7 +17,7 @@
 
 (defonce halt? (atom false))
 (defonce stopped-at (atom nil))
-(defonce sleep-ms (atom 1000))
+(defonce sleep-ms (atom 500))
 
 (defn pmap-items! [item-ids]
   (let [resps (pmap api/item! item-ids)]
@@ -31,13 +31,11 @@
     (str "items-" start-id "-" end-id)
     items))
 
-
-
 (defn download-items! [start-id]
   (reset! halt? false)
   (transduce
     (comp
-      (partition-all 100)
+      (partition-all 250)
       (map pmap-items!)
       (map (fn [{:keys [items item-ids status-200? resps]}]
              (if status-200?
@@ -58,5 +56,6 @@
 (comment
 
   (reset! halt? true)
+  (reset! sleep-ms 500)
   (download-items! 1)
   )
