@@ -1,5 +1,6 @@
 (ns org.saberstack.hn.dl
-  (:require [org.saberstack.hn.api-v0 :as api]
+  (:require [charred.api :as charred]
+            [org.saberstack.hn.api-v0 :as api]
             [taoensso.nippy :as nippy]
             [taoensso.timbre :as timbre]))
 
@@ -57,12 +58,18 @@
     (iterate inc start-id)))
 
 (defn thaw-items [file-name]
-  (nippy/thaw-from-file (str "./hndl/" file-name)))
+  (into []
+    (comp
+      (map (fn [s] (charred/read-json s :key-fn keyword)))
+      (map (juxt :type :score keys)))
+    (nippy/thaw-from-file (str "./hndl/" file-name))))
+
+
 
 (comment
 
   (reset! halt? true)
   (reset! sleep-ms 20)
   (future
-    (download-items! 11487001))
+    (download-items! 25286001))
   )
