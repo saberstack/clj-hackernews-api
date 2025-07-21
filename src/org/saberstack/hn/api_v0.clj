@@ -23,7 +23,7 @@
 (defn max-item!
   "The current largest item id"
   []
-  (http-client/get (uri "max-item")))
+  (http-client/get (uri "maxitem")))
 
 (defn updates!
   "Item and profile changes"
