@@ -11,7 +11,7 @@ This library provides a simple interface to interact with the HackerNews Firebas
 Add the following dependency to your `deps.edn`:
 
 ```clojure
-org.babashka/http-client {:mvn/version "0.4.22"}
+org.saberstack/clj-hackernews-api {:git/sha "lookup latest sha"}
 ```
 
 
