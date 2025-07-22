@@ -57,15 +57,6 @@
     conj
     (iterate inc start-id)))
 
-(defn thaw-items [file-name]
-  (into []
-    (comp
-      (map (fn [s] (charred/read-json s :key-fn keyword)))
-      (map (juxt :type :score keys)))
-    (nippy/thaw-from-file (str "./hndl/" file-name))))
-
-
-
 (comment
 
   (reset! halt? true)
