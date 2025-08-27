@@ -8,7 +8,6 @@
             [taoensso.timbre :as timbre]))
 
 (comment
-
   (nippy/freeze-to-file
     "items-test-2"
     (into []
@@ -16,7 +15,8 @@
         api/item!
         (range 1))))
 
-  (nippy/thaw-from-file "./hndl/items-44642001-44643000")
+  (nippy/thaw-from-file
+    (str "./hndl/" "items-45024001-45025000"))
   )
 
 (defn find-latest-id []
